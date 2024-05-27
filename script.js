@@ -12,6 +12,20 @@ function logActivity(type) {
     const listItem = document.createElement('li');
     listItem.textContent = `${type} at ${timeString}`;
     document.getElementById('logList').appendChild(listItem);
+    postDataToGoogleSheets(now.toISOString(), type);
+}
+
+function postDataToGoogleSheets(timestamp, activity) {
+    fetch(https://script.google.com/macros/s/AKfycby8c3zwghdkyHLCFZHJh_Qm20GxsFYZT1rlFAOylnxAS-pzBV_c5QQXov3UymKilrmb/exec, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({timestamp: timestamp, activity: activity})
+    })
+    .then(response => response.json())
+    .then(data => console.log("Data posted successfully: ", data))
+    .catch(error => console.error('Error posting data:', error));
 }
 
 function undoLastEntry() {
@@ -20,3 +34,9 @@ function undoLastEntry() {
         logList.removeChild(logList.lastChild);
     }
 }
+
+
+
+
+
+
