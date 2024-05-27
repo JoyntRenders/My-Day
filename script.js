@@ -12,20 +12,7 @@ function logActivity(type) {
     const listItem = document.createElement('li');
     listItem.textContent = `${type} at ${timeString}`;
     document.getElementById('logList').appendChild(listItem);
-    postDataToGoogleSheets(now.toISOString(), type);
-}
-
-function postDataToGoogleSheets(timestamp, activity) {
-    fetch(https://script.google.com/macros/s/AKfycby8c3zwghdkyHLCFZHJh_Qm20GxsFYZT1rlFAOylnxAS-pzBV_c5QQXov3UymKilrmb/exec, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({timestamp: timestamp, activity: activity})
-    })
-    .then(response => response.json())
-    .then(data => console.log("Data posted successfully: ", data))
-    .catch(error => console.error('Error posting data:', error));
+    sendActivityData(type);
 }
 
 function undoLastEntry() {
@@ -35,8 +22,12 @@ function undoLastEntry() {
     }
 }
 
-
-
-
-
-
+function sendActivityData(activity) {
+    const baseURL = 'https://script.google.com/macros/s/AKfycbxi_0qI_oIA_mv4uPO4Q1qf1_l2jJJj1H9zxP9AyappID1LIBSXhVuQKiayf2q1IZ86/exec';
+    fetch(`${baseURL}?activity=${encodeURIComponent(activity)}`, {
+        method: 'GET' // Can change to POST if required by server
+    })
+    .then(response => response.text()) // Processing the response
+    .then(data => console.log(data)) // Handling data
+    .catch(error => console.error('Error:', error)); // Handling errors
+}
